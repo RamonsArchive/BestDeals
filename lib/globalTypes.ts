@@ -18,3 +18,9 @@ export type ProductType = {
         };
     }[];
 };
+
+export type ActionState = {
+    status: 'INITIAL' | 'LOADING' | 'SUCCESS' | 'ERROR';
+    error: string;
+    
+}

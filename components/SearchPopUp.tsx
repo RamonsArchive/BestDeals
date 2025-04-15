@@ -5,8 +5,18 @@ import {X, Search} from 'lucide-react'
 import Image from 'next/image'
 import Form from "next/form";
 import Link from "next/link";
+import Loader from './Loader';
+import { toast } from 'sonner';
+import { parseServerActionResponse } from '@/lib/utils';
+import { ActionState } from '@/lib/globalTypes';
+import  {useContext } from 'react';
+import { FilterContext} from './FilterContext';
+import { Session } from 'next-auth';
+import { useRouter } from 'next/navigation';
 
-const SearchPopUp = ({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) => {
+const SearchPopUp = ({session, isOpen, setIsOpen}: {session: Session | undefined, isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) => {
+  const {resetFilters} = useContext(FilterContext);
+  const router = useRouter();
 
   const [query, setQuery] = useState('');
   const mainRef = useRef<HTMLDivElement>(null);
@@ -28,24 +38,52 @@ const SearchPopUp = ({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.Dis
   }, [isOpen])
 
 
-  const handleFormSubmit = async (state: any,formData: FormData) => {
+  const handleFormSubmit = async (state: { status: string; error: string; }, formData: FormData): Promise<{ status: string; error: string; }> => {
     try {
-
+        const query = formData.get('query');
+        console.log(query);
+        if (!query) {
+            return {
+                status: "ERROR",
+                error: "No query provided"
+            }
+        }
+        const userId = session?.user?.id;
+        resetFilters();
+        router.push(`/search?query=${encodeURIComponent(query as string).toLowerCase()}`)
+        if (userId) {
+            // write recent search history
+        }
+        // revalidate recent searches
+        setQuery('');
+        setIsOpen(false);
+        toast.success("SUCCESS", {
+            description: "Search successful",
+        });
+        return {
+            status: "SUCCESS",
+            error: ""
+        }
     } catch (error) {
         console.error(error);
+        toast.error("ERROR", {
+            description: "Failed to search",
+        });
         return {
             status: "ERROR",
             error: "Failed to search"
         }
     }
   }
-
+  
   const [state, formAction, isPending] = useActionState(handleFormSubmit, {
     status: "INITIAL",
     error: ''
   })
 
   return (
+    <>
+    {isPending && <Loader />}
     <div ref={mainRef} className={`fixed top-0 left-0 z-[50] h-full sm:h-[80%] w-full transform transition-all duration-300 ease-in-out ${isOpen ? "translate-y-0 opacity-100 shadow-sm" : "-translate-y-full opacity-0"}`} style={{backgroundColor: 'var(--background)'}}>
         <div className="flex flex-col gap-5 w-full items-center justify-center">
         <div className="flex justiy-between w-full px-3 pt-2">
@@ -71,6 +109,7 @@ const SearchPopUp = ({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.Dis
                                 placeholder="Search..." 
                                 className="w-full pl-10 pr-10 py-3 text-[16px] sm:text-[18px] md:text-[20px] rounded-md border border-gray-300 focus:outline-none focus:ring-0" 
                                 value={query} 
+                                disabled={isPending}
                                 onChange={(e) => setQuery(e.target.value)}
                             />
                             {query && (
@@ -99,6 +138,7 @@ const SearchPopUp = ({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.Dis
         </div>
         </div>
     </div>
+    </>
   )
 }
 

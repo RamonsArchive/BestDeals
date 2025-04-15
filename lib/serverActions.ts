@@ -1,7 +1,7 @@
 import {prisma} from "./prisma";
 import { ProductType } from "./globalTypes";
 import { signIn, signOut } from "next-auth/react";
-import { parseServerAction } from "./utils";
+import { parseServerActionResponse } from "./utils";
 
 export const fetchAllProducts = async (): Promise<ProductType[]> => {
     try {
@@ -46,7 +46,7 @@ export const hanldeSignIn = async (callbackUrl: string) => {
         await signIn('google', {callbackUrl});
     } catch (error) {
         console.error('Error signing in:', error);
-        return parseServerAction({
+        return parseServerActionResponse({
             status: 'ERROR',
             error: 'Failed to sign in',
         });
@@ -58,9 +58,21 @@ export const hanldeSignOut = async () => {
         await signOut();
     } catch (error) {
         console.error('Error signing out:', error);
-        return parseServerAction({
+        return parseServerActionResponse({
             status: 'ERROR',
             error: 'Failed to sign out',
     })
+    }
+}
+
+export const fetchSearchResults = async (query: string) => {
+    try {
+
+    } catch (error) {
+        console.error('Error fetching search results:', error);
+        return parseServerActionResponse({
+            status: 'ERROR',
+            error: 'Failed to search',
+        })
     }
 }

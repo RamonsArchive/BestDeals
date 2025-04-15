@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const parseServerActionResponse = <T>(response: T): T => {
-  return JSON.parse(JSON.stringify(response));
+  return JSON.parse(JSON.stringify(response)) as T;
 }

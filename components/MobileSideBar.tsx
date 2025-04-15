@@ -49,7 +49,7 @@ const MobileSideBar = () => {
               {Object.entries(filters).map(([category, {expanded, options}]) => (
                 <div key={category} className={`flex flex-col w-full gap-4 border-b-[1px] border-gray-200 pb-3 pt-3`}>
                   <button className="flex flex-row w-full justify-between items-center cursor-pointer" onClick={() => toggleCategory(category)}>
-                    <p className="text-[18px] sm:text-[20px] md:text-[22px] font-semibold">
+                    <p className="text-[18px] sm:text-[20px] font-semibold">
                       {category.slice(0, 1).toUpperCase() + category.slice(1)}
                     </p>
                     {expanded ? 
@@ -73,7 +73,7 @@ const MobileSideBar = () => {
               ))}
               <div className="flex flex-col w-full gap-3 border-b-[1px] border-gray-200 pb-3">
                 <button className="flex flex-row w-full justify-between items-center" onClick={() => setLocationDrop((prev) => !prev)}>
-                  <p className="text-[18px] sm:text-[20px] md:text-[22px] font-semibold">Location</p>
+                  <p className="text-[18px] sm:text-[20px] font-semibold">Location</p>
                   {locationDrop ? <ChevronUp className="size-6 sm:size-7 cursor-pointer" /> : <ChevronDown className="size-6 sm:size-7 cursor-pointer"  />}
                 </button>
                 <div className={`flex flex-row gap-2 transform transition-all duration-300 ease-in-out w-full ${locationDrop ? "max-h-full" : "max-h-0 overflow-hidden"} `}>
@@ -105,7 +105,7 @@ const MobileSideBar = () => {
               </div>
               <div className="flex flex-col w-full gap-3">
                 <button className="flex flex-row w-full justify-between items-center" onClick={() => setPriceDrop((prev) => !prev)}>
-                  <p className="text-[18px] sm:text-[20px] md:text-[22px] font-semibold">Price</p>
+                  <p className="text-[18px] sm:text-[20px] font-semibold">Price</p>
                   {priceDrop ? <ChevronUp className="size-6 sm:size-7 cursor-pointer" /> : <ChevronDown className="size-6 sm:size-7 cursor-pointer"  />}
                 </button>
                 <div className={`flex flex-row gap-2 transform transition-all duration-300 ease-in-out w-full ${priceDrop ? "max-h-full" : "max-h-0 overflow-hidden"} `}>

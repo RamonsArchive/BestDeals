@@ -19,7 +19,7 @@ const Navbar = ({session}: {session?: Session | undefined}) => {
         </div>
         </Link>
         <div className="flex flex-row gap-3 sm:gap-4 lg:gap-5 justify-end items-center w-full h-full">
-          <SearchButton />
+          <SearchButton session={session}/>
           <Heart className="size-9 md:size-10 cursor-pointer transition-all duration-300 ease-in-out hover:text-gray-500 p-1 rounded-full hover:bg-gray-300 active:bg-gray-300" />
           <Suspense fallback={<div>Loading...</div>}>
           <UserButton session={session || undefined}/>
