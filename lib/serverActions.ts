@@ -40,6 +40,24 @@ export const fetchAllProducts = async (): Promise<ProductType[]> => {
     }
 }
 
+export const fetchProducts = async (path: string, query: string, filters: string) => {
+    if (!query && !filters) {
+        return fetchAllProducts();
+    }
+
+    const filterArray = filters.split(",").map(filter => filter.trim().toLowerCase()).filter(Boolean);
+    const queryArray = query.split(",").map(query => query.trim().toLowerCase()).filter(Boolean);
+    
+   /* try {
+        const items = await prisma.items6.findMany({
+            where: {
+                description: {contains: query}
+            }
+        })
+    }*/
+    return [];
+}
+
 
 export const hanldeSignIn = async (callbackUrl: string) => {
     try {
