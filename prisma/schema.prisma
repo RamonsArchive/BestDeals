@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model items6 {
+  id               Int      @id @default(autoincrement())
+  price            Decimal? @db.Decimal(10, 2)
+  description      String?  @db.Text
+  location         String?  @db.VarChar(255)
+  link             String?  @db.Text
+  new_price_column Decimal? @db.Decimal(10, 2)
+  deal             String?  @db.VarChar(50)
+}
+
+model User {
+  id                Int                  @id @default(autoincrement())
+  userId            String               @unique
+  firstName         String
+  lastName          String
+  email             String               @unique
+  imageUrl          String?
+  provider          Provider
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  heartedProducts   UserHeartedProduct[]
+  reviews           UserReview[]
+  recentlyViewed    UserRecentlyViewed[]
+  searches          UserSearch[]
+  categories        UserCategory[]
+  flaggedReviews    FlaggedReview[]
+}
+
+model Product {
+  id                Int                  @id @default(autoincrement())
+  price             Float                // Original price column
+  description       String               @db.Text
+  location          String
+  link              String               @db.Text   // Facebook marketplace link
+  new_price_column  Float                // Original retail price
+  deal              String?              // GOOD, EXCELLENT, OK
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  
+  // User interactions
+  reviews           UserReview[]
+  viewedBy          UserRecentlyViewed[]
+  heartedBy         UserHeartedProduct[]
+
+  @@map("products")
+}
+
+model UserHeartedProduct {
+  id                Int                  @id @default(autoincrement())
+  userId            Int
+  productId         Int
+  createdAt         DateTime             @default(now())
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product           Product              @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("user_hearted_products")
+}
+
+model UserReview {
+  id                Int                  @id @default(autoincrement())
+  userId            Int
+  productId         Int
+  rating            Int                  @db.SmallInt
+  comment           String?              @db.Text
+  createdAt         DateTime             @default(now())
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product           Product              @relation(fields: [productId], references: [id], onDelete: Cascade)
+  flags             FlaggedReview[]
+
+  @@map("user_reviews")
+  @@index([userId])
+  @@index([productId])
+}
+
+model UserRecentlyViewed {
+  id                Int                  @id @default(autoincrement())
+  userId            Int
+  productId         Int
+  viewedAt          DateTime             @default(now())
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product           Product              @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("user_recently_viewed")
+}
+
+model UserSearch {
+  id                Int                  @id @default(autoincrement())
+  userId            Int
+  query             String
+  searchedAt        DateTime             @default(now())
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, query])
+  @@map("user_searches")
+}
+
+model UserCategory {
+  id                Int                  @id @default(autoincrement())
+  userId            Int
+  category          String
+  clickCount        Int                  @default(1)
+  lastVisited       DateTime             @default(now())
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, category])
+  @@map("user_categories")
+}
+
+model FlaggedReview {
+  id                Int               @id @default(autoincrement())
+  reviewId          Int
+  flaggedById       Int
+  flagReason        FlagReason
+  createdAt         DateTime          @default(now())
+  moderationStatus  ModerationStatus  @default(pending)
+  review            UserReview        @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  flaggedBy         User              @relation(fields: [flaggedById], references: [id], onDelete: Cascade)
+
+  @@map("flagged_reviews")
+}
+
+enum Provider {
+  google
+  github
+  email
+  credentials
+}
+
+enum FlagReason {
+  inappropriate
+  misleading
+  hatespeech
+  harassment
+  violence
+  spam
+  other
+}
+
+enum ModerationStatus {
+  pending
+  reviewed
+  removed
+}
