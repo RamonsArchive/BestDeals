@@ -114,6 +114,27 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
     setDefaultFilters();
   }, []);
 
+  useEffect(() => {
+    if (path.includes("/sign-in") || path.includes("/product")) {
+      console.log("skipping filter update");
+      return;
+    }
+    const clickedFilters = Object.values(selectedFilters).flat().filter(Boolean).join(",");
+    console.log("clickedFilters", clickedFilters);
+
+
+    let newQueryParams = path;
+    const queryParams = new URLSearchParams();
+    if (query) queryParams.set("query", query);
+    if (clickedFilters) queryParams.set("f", clickedFilters);
+    if (queryParams.size > 0) newQueryParams += `?${queryParams.toString()}`;
+
+    console.log("newQueryParams", newQueryParams);
+
+    
+    router.push(newQueryParams.toLowerCase());
+  },[selectedFilters])
+
 
   const toggleCategory = (category: string) => {
     setFilters((prev) => ({
