@@ -89,7 +89,7 @@ const SearchPopUp = ({session, isOpen, setIsOpen}: {session: Session | undefined
         <div className="flex justiy-between w-full px-3 pt-2">
             <Link href="/" onClick={() => setIsOpen(false)}>
             <div className="relative w-16 h-12 sm:w-18 sm:h-13 md:w-20 md:h-15">
-            <Image src="/logo/logoTwo.svg" alt="logo" fill className='object-cover' />
+            <Image src="/assets/logo/logoTwo.svg" alt="logo" fill className='object-cover' />
             </div>
             </Link>
             <div className="flex items-center ml-auto">

@@ -1,6 +1,7 @@
-import NextAuth from "next-auth"
+import NextAuth, { User } from "next-auth"
 import Google from "next-auth/providers/google"
 import {prisma} from "@/lib/prisma"
+import { AdapterUser } from "next-auth/adapters";
  
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google],
@@ -49,6 +50,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return false;
       }
       
+    },
+
+    async jwt({token, user, profile}) {
+      if (profile?.sub && !token.id) {
+        token.id = profile.sub;
+      }
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.user = token.user as AdapterUser & User;
+      session.user.id = token.id as string;
+      return session;
+    },
+
+    async redirect({url, baseUrl}) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      return url;
     }
   }
 })

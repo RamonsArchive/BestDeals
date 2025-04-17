@@ -1,7 +1,9 @@
 import React from 'react'
 import { auth } from '@/auth';
-import { fetchProducts } from '@/lib/serverActions';
+import { fetchProducts, fetchHeartedProducts } from '@/lib/serverActions';
 import ProductGrid from '@/components/ProductGrid';
+import { ProductType } from '@/lib/globalTypes';
+
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const experimental_ppr = true;
@@ -19,17 +21,18 @@ const page = async ({params, searchParams}: {params: Promise<{path: string}>, se
 
   const session = await auth();
   const userId = session?.user?.id;
-  // heartedProducts = []
+  let heartedProducts: ProductType[] = [];       
   if (userId) {
     // fetch hearted products
+    heartedProducts = await fetchHeartedProducts(userId);
   }
 
-  const products = await fetchProducts(path, query, filters, price, zip);
+  const products = await fetchProducts(userId, query, filters, price, zip);
 
-  return (
+  return ( 
     <main className="w-full h-full flex flex-col flex-1 gap-5 p-5">
     <p className="text-[20px] sm:text-[24px] font-bold">All Products</p>
-    <ProductGrid products={products} userId={userId} />
+    <ProductGrid products={products} userId={userId} heartedProducts={heartedProducts} />
   </main>
   )
 }

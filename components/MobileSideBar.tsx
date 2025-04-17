@@ -97,7 +97,6 @@ const MobileSideBar = () => {
                       {zipCode === "" ? "No zip yet" : `Zip: ${zipCode}`}
                     </span>
                     <div className="flex flex-col gap-1 w-full">
-                      <button className={`bg-gradient-to-r from-[#1877f2] via-[#1668d4] to-[#1459b6] text-white px-2 py-1 rounded-md transform transition-all duration-200 ease-in-out hover:from-[#1668d4] hover:via-[#1459b6] hover:to-[#124ca8] active:scale-95 text-[14px] sm:text-[16px] shadow-md ${zipCode.length === 5 ? "cursor-pointer" : "opacity-50 cursor-not-allowed"}`}>Search</button>
                       <button className="bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white px-2 py-1 rounded-md transform transition-all duration-200 ease-in-out hover:from-red-600 hover:via-red-700 hover:to-red-800 active:scale-95 cursor-pointer text-[14px] sm:text-[16px] shadow-md" onClick={() => setZipCode("")}>Clear</button>
                     </div>
                   </div>
@@ -115,7 +114,8 @@ const MobileSideBar = () => {
                       <span className="text-[14px] sm:text-[16px] font-regular whitespace-nowrap">${priceRange.value} </span>
                       <span className="text-[14px] sm:text-[16px] font-regular whitespace-nowrap">- ${ priceRange.max}</span>
                     </div>
-                    <input type="range" min={priceRange.min} max={priceRange.max} value={priceRange.value} onChange={(e) => setPriceValue(parseInt(e.target.value))} className="flex-1" />
+                    <input type="text" placeholder="Enter max price" value={priceRange.value === 0 ? "" : priceRange.value} onChange={(e) => setPriceValue(parseInt(e.target.value))} className="w-full p-2 mr-2 border-[1px] border-gray-300 rounded-md active:outline-none focus:outline-none text-[14px] lg:text-[16px] max-w-sm" />
+              
                   </div>
                 </div>
               </div>

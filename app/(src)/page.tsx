@@ -1,13 +1,17 @@
 import { auth } from '@/auth';
 import React from 'react'
-import { fetchProducts } from '@/lib/serverActions';
+import { fetchHeartedProducts, fetchProducts } from '@/lib/serverActions';
 import ProductGrid from '@/components/ProductGrid';
+import { ProductType } from '@/lib/globalTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const experimental_ppr = true;
 
 const page = async ({params, searchParams}: {params: Promise<{path: string}>, searchParams: Promise<{query?: string, f?: string, price?: string, zip?: string}>}) => {
   const session = await auth();
+  console.log("session", session);
+  console.log("session?.user", session?.user);
+  console.log("session?.user?.id", session?.user?.id);
   const userId = session?.user?.id;
 
   const path = (await params).path || "/";
@@ -25,20 +29,19 @@ const page = async ({params, searchParams}: {params: Promise<{path: string}>, se
   if (queryParams.toString()) {callbackUrl += `?${queryParams.toString()}`}
   console.log("callbackUrl", callbackUrl);
 
-  // let heartedProducts = [];
 
-  const products = await fetchProducts(path, query, filters);
 
+  const products = await fetchProducts(userId, query, filters, price, zip);
+
+  let heartedProducts: ProductType[] = [];
   if (userId) {
-    // get hearted products;
+    heartedProducts = await fetchHeartedProducts(userId);
   }
-
-  console.log(products);
-  console.log("databaseUrl", process.env.DATABASE_URL);
+  console.log('heartedProducts', heartedProducts);
   return (
     <main className="w-full h-full flex flex-col flex-1 gap-5 p-5">
       <p className="text-[20px] sm:text-[24px] font-bold">All Products</p>
-      <ProductGrid products={products} userId={userId} />
+      <ProductGrid products={products} userId={userId} heartedProducts={heartedProducts} />
     </main>
   )
 }

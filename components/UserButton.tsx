@@ -1,14 +1,13 @@
 "use client";
-
 import React, { useState, useActionState } from 'react'
 import { UserRound } from 'lucide-react'
 import { Session } from 'next-auth';
 import Image from 'next/image';
-import { hanldeSignIn, hanldeSignOut } from '@/lib/serverActions';
 import { parseServerActionResponse } from '@/lib/utils';
 import {usePathname} from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import Loader from './Loader';
+import {signIn, signOut} from 'next-auth/react';
 
 
 const UserButton = ({session}: {session?: Session | undefined}) => {
@@ -18,14 +17,15 @@ const UserButton = ({session}: {session?: Session | undefined}) => {
   const callbackUrl = `${pathname}?${searchParams.toString()}`;
 
 
-  const [isLoggedIn, setIsLoggedIn] = useState(user);
+  const [isLoggedIn, setIsLoggedIn] = useState(user ? true : false);
 
   const hanldeUserToggle = async () => {
+    setIsLoggedIn(!isLoggedIn);
     try {
         if (isLoggedIn) {
-            await hanldeSignOut();
+            await signOut({redirectTo: "/"});
         } else {
-            await hanldeSignIn(callbackUrl);
+            await signIn('google', {redirectTo: callbackUrl});
         }
 
     } catch (error) {
@@ -42,11 +42,6 @@ const UserButton = ({session}: {session?: Session | undefined}) => {
             })
         }
         
-    }
-    if (isLoggedIn) {
-        await hanldeSignOut();
-    } else {
-        await hanldeSignIn(callbackUrl);
     }
   }
 

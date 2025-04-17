@@ -1,22 +1,11 @@
 export type ProductType = {
     id: number;
-    price: number;
+    price: number | null;
     description: string;
     location: string;
     link: string;
-    new_price_column: number;
+    new_price_column: number | null;
     deal: string | null;
-    createdAt: Date;
-    updatedAt: Date;
-    reviews: {
-        rating: number;
-        comment: string | null;
-        user: {
-            firstName: string;
-            lastName: string;
-            imageUrl: string | null;
-        };
-    }[];
 };
 
 export type ActionState = {

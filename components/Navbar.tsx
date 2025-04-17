@@ -15,7 +15,7 @@ const Navbar = ({session}: {session?: Session | undefined}) => {
       <div className="flex flex-row justify-between items-center w-full h-full">
         <Link href="/">
         <div className='relative w-[60px] h-[45px] md:w-[75px] md:h-[55px]'>
-        <Image src="/logo/logoTwo.svg" alt="logo" fill className='object-cover' />
+        <Image src="/assets/logo/logoTwo.svg" alt="logo" fill className='object-cover' />
         </div>
         </Link>
         <div className="flex flex-row gap-3 sm:gap-4 lg:gap-5 justify-end items-center w-full h-full">
