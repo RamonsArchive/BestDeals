@@ -6,10 +6,16 @@ import ProductGrid from '@/components/ProductGrid';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const experimental_ppr = true;
 
-const page = async ({params, searchParams}: {params: Promise<{path: string}>, searchParams: Promise<{query?: string, f?: string}>}) => {
+const page = async ({params, searchParams}: {params: Promise<{path: string}>, searchParams: Promise<{query?: string, f?: string, price?: string, zip?: string}>}) => {
   const path = (await params).path || "/";
   const query = (await searchParams).query || "";
   const filters = (await searchParams).f || "";
+  const price = (await searchParams).price || "";
+  const zip = (await searchParams).zip || "";
+
+  console.log("price", price);
+  console.log("zip", zip);
+
 
   const session = await auth();
   const userId = session?.user?.id;
@@ -18,7 +24,7 @@ const page = async ({params, searchParams}: {params: Promise<{path: string}>, se
     // fetch hearted products
   }
 
-  const products = await fetchProducts(path, query, filters);
+  const products = await fetchProducts(path, query, filters, price, zip);
 
   return (
     <main className="w-full h-full flex flex-col flex-1 gap-5 p-5">

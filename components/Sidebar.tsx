@@ -9,7 +9,6 @@ export function Sidebar() {
   const {
     filters,
     priceRange,
-    setPriceRange,
     toggleFilter,
     toggleCategory,
     selectedFilters,
@@ -18,7 +17,8 @@ export function Sidebar() {
     locationDrop,
     setLocationDrop,
     zipCode,
-    setZipCode
+    setZipCode,
+    setPriceValue
   } = useFilters();
   return (
     <aside className="flex flex-col gap-5 w-full min-h-[calc(100vh-4rem)] items-center pt-5 mb-[4rem]">
@@ -33,14 +33,14 @@ export function Sidebar() {
             </button>
             <div className={`flex flex-col gap-2 transform transition-all duration-300 ease-in-out ${expanded ? "max-h-full" : "max-h-0 overflow-hidden"} `}>
             {options.map((option, index) => (
-               <FilterBox key={index} category={category} isChecked={selectedFilters[category]?.includes(option)} expanded={expanded} option={option} toggleFilter={toggleFilter} />
-            ))}
+               <FilterBox key={index} category={category} isChecked={selectedFilters[category]?.includes(option.toLowerCase())} expanded={expanded} option={option} toggleFilter={toggleFilter} />
+              ))}
             </div>
            
           </div>
         ))}
         <div className="flex flex-col w-full gap-3 border-b-[1px] border-gray-200 pb-3">
-          <button className="flex flex-row w-full justify-between items-center" onClick={() => setLocationDrop((prev) => !prev)}>
+          <button className="flex flex-row w-full justify-between items-center" onClick={() => setLocationDrop(!locationDrop)}>
             <p className="text-[14px] sm:text-[16px] md:text-[18px] font-semibold">Location</p>
             {locationDrop ? <ChevronUp className="size-4 xs:size-5 sm:size-6 lg:size-7 cursor-pointer" /> : <ChevronDown className="size-4 xs:size-5 sm:size-6 lg:size-7 cursor-pointer"  />}
           </button>
@@ -72,7 +72,7 @@ export function Sidebar() {
           </div>
         </div>
         <div className="flex flex-col w-full gap-4">
-          <button className="flex flex-row w-full justify-between items-center" onClick={() => setPriceDrop((prev) => !prev)}>
+          <button className="flex flex-row w-full justify-between items-center" onClick={() => setPriceDrop(!priceDrop)}>
             <p className="text-[14px] sm:text-[16px] md:text-[18px] font-semibold">Price</p>
             {priceDrop ? <ChevronUp className="size-4 xs:size-5 sm:size-6 lg:size-7 cursor-pointer" /> : <ChevronDown className="size-4 xs:size-5 sm:size-6 lg:size-7 cursor-pointer"  />}
           </button>
@@ -83,7 +83,7 @@ export function Sidebar() {
               <span className="text-[12px] xs:text-[13px] sm:text-[14px] lg:text-[16px] font-regular whitespace-nowrap">${priceRange.value} </span>
               <span className="text-[12px] xs:text-[13px] sm:text-[14px] lg:text-[16px] font-regular whitespace-nowrap">- ${ priceRange.max}</span>
               </div>
-              <input type="range" min={priceRange.min} max={priceRange.max} value={priceRange.value} onChange={(e) => setPriceRange({...priceRange, value: parseInt(e.target.value)})} className="flex-1" />
+              <input type="range" min={priceRange.min} max={priceRange.max} value={priceRange.value} onChange={(e) => setPriceValue(parseInt(e.target.value))} className="flex-1" />
               
             </div>
           </div>

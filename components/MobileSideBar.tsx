@@ -9,7 +9,7 @@ import { X } from 'lucide-react';
 
 const MobileSideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {filters, selectedFilters, toggleFilter, toggleCategory, priceRange, setPriceRange, priceDrop, setPriceDrop, locationDrop, setLocationDrop, zipCode, setZipCode} = useContext(FilterContext);
+  const {filters, selectedFilters, toggleFilter, toggleCategory, priceRange, priceDrop, setPriceDrop, locationDrop, setLocationDrop, zipCode, setZipCode, setPriceValue} = useContext(FilterContext);
 
   useEffect(() => {
     if (isOpen) {
@@ -72,7 +72,7 @@ const MobileSideBar = () => {
                 </div>
               ))}
               <div className="flex flex-col w-full gap-3 border-b-[1px] border-gray-200 pb-3">
-                <button className="flex flex-row w-full justify-between items-center" onClick={() => setLocationDrop((prev) => !prev)}>
+                <button className="flex flex-row w-full justify-between items-center" onClick={() => setLocationDrop(!locationDrop)}>
                   <p className="text-[18px] sm:text-[20px] font-semibold">Location</p>
                   {locationDrop ? <ChevronUp className="size-6 sm:size-7 cursor-pointer" /> : <ChevronDown className="size-6 sm:size-7 cursor-pointer"  />}
                 </button>
@@ -104,7 +104,7 @@ const MobileSideBar = () => {
                 </div>
               </div>
               <div className="flex flex-col w-full gap-3">
-                <button className="flex flex-row w-full justify-between items-center" onClick={() => setPriceDrop((prev) => !prev)}>
+                <button className="flex flex-row w-full justify-between items-center" onClick={() => setPriceDrop(!priceDrop)}>
                   <p className="text-[18px] sm:text-[20px] font-semibold">Price</p>
                   {priceDrop ? <ChevronUp className="size-6 sm:size-7 cursor-pointer" /> : <ChevronDown className="size-6 sm:size-7 cursor-pointer"  />}
                 </button>
@@ -115,7 +115,7 @@ const MobileSideBar = () => {
                       <span className="text-[14px] sm:text-[16px] font-regular whitespace-nowrap">${priceRange.value} </span>
                       <span className="text-[14px] sm:text-[16px] font-regular whitespace-nowrap">- ${ priceRange.max}</span>
                     </div>
-                    <input type="range" min={priceRange.min} max={priceRange.max} value={priceRange.value} onChange={(e) => setPriceRange({...priceRange, value: parseInt(e.target.value)})} className="flex-1" />
+                    <input type="range" min={priceRange.min} max={priceRange.max} value={priceRange.value} onChange={(e) => setPriceValue(parseInt(e.target.value))} className="flex-1" />
                   </div>
                 </div>
               </div>

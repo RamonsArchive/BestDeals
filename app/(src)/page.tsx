@@ -6,13 +6,17 @@ import ProductGrid from '@/components/ProductGrid';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const experimental_ppr = true;
 
-const page = async ({params, searchParams}: {params: Promise<{path: string}>, searchParams: Promise<{query?: string, f?: string}>}) => {
+const page = async ({params, searchParams}: {params: Promise<{path: string}>, searchParams: Promise<{query?: string, f?: string, price?: string, zip?: string}>}) => {
   const session = await auth();
   const userId = session?.user?.id;
 
   const path = (await params).path || "/";
   const query = (await searchParams).query || "";
   const filters = (await searchParams).f || "";
+  const price = (await searchParams).price || "";
+  const zip = (await searchParams).zip || "";
+  console.log("price", price);
+  console.log("zip", zip);
 
   let callbackUrl = path;
   const queryParams = new URLSearchParams();

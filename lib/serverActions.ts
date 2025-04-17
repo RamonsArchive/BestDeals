@@ -40,13 +40,15 @@ export const fetchAllProducts = async (): Promise<ProductType[]> => {
     }
 }
 
-export const fetchProducts = async (path: string, query: string, filters: string) => {
+export const fetchProducts = async (path: string, query: string, filters: string, price: string, zip: string) => {
     if (!query && !filters) {
         return fetchAllProducts();
     }
 
     const filterArray = filters.split(",").map(filter => filter.trim().toLowerCase()).filter(Boolean);
     const queryArray = query.split(",").map(query => query.trim().toLowerCase()).filter(Boolean);
+    const priceArray = price.split(",").map(price => price.trim().toLowerCase()).filter(Boolean);
+    const zipArray = zip.split(",").map(zip => zip.trim().toLowerCase()).filter(Boolean);
     
    /* try {
         const items = await prisma.items6.findMany({
