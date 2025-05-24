@@ -9,7 +9,7 @@ const layout = ({children}: {children: React.ReactNode}) => {
     <FilterProvider>
       <main className="min-h-screen flex flex-col">
         <NavbarWrapper />
-        <div className="flex flex-col md:flex-row flex-1 gap-3 pb-5 pt-5">
+        <div className="flex flex-col w-full md:flex-row flex-1 gap-3 pb-5 pt-5">
           <SidebarWrapper />
           <div className="flex-1">
             {children}

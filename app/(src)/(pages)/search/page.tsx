@@ -31,7 +31,7 @@ const page = async ({params, searchParams}: {params: Promise<{path: string}>, se
 
   return ( 
     <main className="w-full h-full flex flex-col flex-1 gap-5 p-5">
-    <p className="text-[20px] sm:text-[24px] font-bold">All Products</p>
+    <p className="text-[22px] sm:text-[24px] md:text-[26px] lg:text-[28px] font-bold">All Products</p>
     <ProductGrid products={products} userId={userId} heartedProducts={heartedProducts} />
   </main>
   )

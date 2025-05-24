@@ -1,10 +1,10 @@
 "use client";
 import React from 'react'
 import ProductCardSkeleton from '@/components/ProductCardSkeleton';
-import ProductCard from '@/components/ProductCard';
 import { ProductType } from '@/lib/globalTypes';
 import { Suspense, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ProductCard from '@/components/ProductCard';
 
 const ProductGrid = ({products, userId, heartedProducts}: {products: ProductType[], userId: string | undefined, heartedProducts: ProductType[]}) => {
 
@@ -30,7 +30,7 @@ const ProductGrid = ({products, userId, heartedProducts}: {products: ProductType
   return (
     <>
     <div className="flex flex-col gap-3">
-    <p className="text-[14px] sm:text-[16px] font-semibold">
+    <p className="text-[14px] sm:text-[16px] md:text-[18px] font-semibold">
         Showing{" "}
         {totalPages === 0 ? 0 : (currentPage - 1) * productsPerPage + 1}-{Math.min(currentPage * productsPerPage, products.length)}{" "} of {products.length} results
     </p>

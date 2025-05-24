@@ -95,6 +95,8 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
   const [priceDrop, putPriceDrop] = useState<boolean>(false);
   const [locationDrop, putLocationDrop] = useState<boolean>(false);
   const [filterState, setFilterState] = useState<FilterState>(defaultFilterState);
+  const [localSelectedFilters, setLocalSelectedFilters] = useState<Record<string, string[]>>({});
+  
   //console.log("filterState", filterState);
   
   // Parse URL parameters into filter state
@@ -122,6 +124,10 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
 
     return result;
   }, [searchParams]);
+
+  useEffect(() => {
+    setLocalSelectedFilters(selectedFilters);
+  }, [selectedFilters]);
   
   // Parse price from URL
   const priceRange = useMemo(() => {
@@ -167,6 +173,25 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
   // Handler functions with useCallback to avoid recreation
   const toggleFilter = useCallback((category: string, filter: string) => {
     const lowerCaseFilter = filter.toLowerCase();
+
+    setLocalSelectedFilters((prev) => {
+      const currentFilters = prev[category] || [];
+      const newFilters = currentFilters.includes(lowerCaseFilter) ? 
+        currentFilters.filter(f => f !== lowerCaseFilter) : [...currentFilters, lowerCaseFilter];
+
+      const updatedFilters = {
+        ...prev,
+        [category]: newFilters
+      }
+
+      if (newFilters.length === 0) {
+        delete updatedFilters[category];
+      }
+
+      return updatedFilters;
+    })
+
+
     const currentFilters = selectedFilters[category] || [];
     console.log("currentFilters", currentFilters);
     const newFilters = currentFilters.includes(lowerCaseFilter)
